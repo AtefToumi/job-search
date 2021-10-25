@@ -19,11 +19,11 @@ const UserSchema = new Schema({
         required: true,
         minLength: [3, 'enter valid name']
     },
-    dateOfBirth: {
-        type: Date,
-        required: true, 
-        trim: true,
-    },
+    // dateOfBirth: {
+    //     type: Date,
+    //     required: false, 
+    //     trim: true,
+    // },
     gender: {
         type: String,
         required: true,

@@ -31,6 +31,7 @@ export const users = async (req: Request, res: Response): Promise<void> => {
  * @returns {Promise<void>}
  */
 export const register = async (req: Request, res: Response): Promise<void> => {
+  console.log(req.body)
   const user = new User({
     email: req.body.email,
     name: req.body.name,
@@ -46,7 +47,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       res.send(successResponse(
         'User created successfully!',
         {
-          data: ''
+          data: (user)
         }
       ))
     }
@@ -74,4 +75,38 @@ User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
   });
 }
 
-
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+ export let updateUser = async (req: Request, res: Response): Promise<void> => {
+  console.log(req.body);
+  let user = User.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    (err: any, user: any) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Successfully updated user!");
+      }
+    }
+  );
+  }
+  /**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+ export let deleteUser = async (req: Request, res: Response): Promise<void> => {
+  let user = User.deleteOne({ _id: req.params.id }, (err: any) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send("Successfully Deleted User");
+    }
+  });
+  }
