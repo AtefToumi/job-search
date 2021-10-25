@@ -4,6 +4,8 @@ import * as UserController from '../controllers/user.controller'
 import {validate} from "../middlewares/validators/wrapper.validator";
 import {indexValidator} from "../middlewares/validators/index.validations";
 
+
+//API Endpoints
 /**
  *
  * @param app
@@ -13,4 +15,5 @@ export const api = (app: Express) => {
     app.post('/', validate(indexValidator), IndexController.indexPost)
     app.get('/users', UserController.users)
     app.post('/users/register', UserController.register)
+    app.get('/users/:id', UserController.getUser)
 }

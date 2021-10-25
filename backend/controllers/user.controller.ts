@@ -51,8 +51,27 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       ))
     }
   });
-
-
-
-
 }
+
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
+    if (err) {
+      res.send(failResponse('User not found', {}));
+    } else {
+      res.send(successResponse(
+        'User found',
+        {
+          data: (user)
+        }
+      ));
+    }
+  });
+}
+
+
