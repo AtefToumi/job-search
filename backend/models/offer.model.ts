@@ -8,37 +8,37 @@ const OfferSchema = new Schema({
         required: true,
         minLength: [3, 'enter valid title']
     },
-    Company: {
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Company'
+    },
+    description: {
         type: String,
         required: true,
     },
-    Description: {
-        type: String,
-        required: true,
-    },
-    Contact: {
+    contact: {
         type: String,
         required: false
     },
-    Requirements: {
+    requirements: {
         type: String,
         required: true,
     },
-    Type: {
+    type: {
         type: String,
-        enum: ['Full-time','Part-time','Internship'],
+        enum: ['Full-time', 'Part-time', 'Internship'],
         required: true,
     },
-    Salary: {
+    salary: {
         type: Number,
         required: false,
     },
-    Location: {
+    location: {
         type: String,
         required: true,
     },
-    Status: {
-        
+    status: {
+
     }
 
 })

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
-import User from '../models/user.model'
 import { successResponse, failResponse } from '../helpers/methods'
+import User from '../models/user.model'
+import Skill from '../models/skill.model'
 
 /**
  *
@@ -9,7 +10,7 @@ import { successResponse, failResponse } from '../helpers/methods'
  * @returns {Promise<void>}
  */
 export const users = async (req: Request, res: Response): Promise<void> => {
-  User.find({}, {_id: 0, __v: 0}, function(err: any, result: any) {
+  User.find({}, { __v: 0 }, function (err: any, result: any) {
     if (err) {
       res.send(failResponse('error', {}))
     } else {
@@ -31,18 +32,23 @@ export const users = async (req: Request, res: Response): Promise<void> => {
  * @returns {Promise<void>}
  */
 export const register = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body)
+  // console.log(Skill.findOne({_id: req.body.skills}).populate('skills','title').lean())
   const user = new User({
     email: req.body.email,
     name: req.body.name,
     dateOfBirth: new Date(req.body.dateOfBirth),
     gender: req.body.gender,
     address: req.body.address,
+    phone: req.body.phone,
+    skills: req.body.skills,
+    // skills: Skill.findOne({skill: req.body.skills._id}).populate('skills','title')
+    
+
   });
 
   user.save((err: any) => {
     if (err) {
-      res.send(failResponse('error', {}))
+      res.send(failResponse('error', { message: err.message }))
     } else {
       res.send(successResponse(
         'User created successfully!',
@@ -61,9 +67,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
  * @returns {Promise<void>}
  */
 export const getUser = async (req: Request, res: Response): Promise<void> => {
-User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
+  User.findById(req.params.id, { __v: 0 }, (err: any, user: any) => {
     if (err) {
-      res.send(failResponse('User not found', {}));
+      res.send(failResponse('User not found', { err }));
     } else {
       res.send(successResponse(
         'User found',
@@ -81,7 +87,7 @@ User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
  * @param res
  * @returns {Promise<void>}
  */
- export let updateUser = async (req: Request, res: Response): Promise<void> => {
+export let updateUser = async (req: Request, res: Response): Promise<void> => {
   console.log(req.body);
   let user = User.findByIdAndUpdate(
     req.params.id,
@@ -94,14 +100,14 @@ User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
       }
     }
   );
-  }
-  /**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
- */
- export let deleteUser = async (req: Request, res: Response): Promise<void> => {
+}
+/**
+*
+* @param req
+* @param res
+* @returns {Promise<void>}
+*/
+export let deleteUser = async (req: Request, res: Response): Promise<void> => {
   let user = User.deleteOne({ _id: req.params.id }, (err: any) => {
     if (err) {
       res.send(err);
@@ -109,4 +115,4 @@ User.findById(req.params.id, {_id: 0, __v: 0}, (err: any, user: any) => {
       res.send("Successfully Deleted User");
     }
   });
-  }
+}

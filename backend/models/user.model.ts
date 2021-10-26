@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: [true, 'an email is required'],
-        unique: true,
+        unique: false,
         validate: {
             validator: function (v: any) {
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
@@ -19,11 +19,11 @@ const UserSchema = new Schema({
         required: true,
         minLength: [3, 'enter valid name']
     },
-    // dateOfBirth: {
-    //     type: Date,
-    //     required: false, 
-    //     trim: true,
-    // },
+    dateOfBirth: {
+        type: Date,
+        required: false,
+        trim: true,
+    },
     gender: {
         type: String,
         required: true,
@@ -34,11 +34,33 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    mobile: {
+    phone: {
         type: String,
         required: false
-    }
-
+    },
+    photo:{
+        type: String
+    },
+    education: [
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Education'
+        }
+    ],
+    experience: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Experience'
+        }
+    ],
+    skills: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Skill'
+        }
+    ]
+        
+    
 
 
 });
