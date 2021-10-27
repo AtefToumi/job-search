@@ -10,11 +10,11 @@ const ApplicationSchema = new Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'user'
     },
     offer: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Offer'
+        ref: 'offer'
     },
     status: {
         type: String,

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { successResponse, failResponse } from '../helpers/methods'
 import User from '../models/user.model'
-import Skill from '../models/skill.model'
 
 /**
  *
@@ -21,7 +20,7 @@ export const users = async (req: Request, res: Response): Promise<void> => {
         }
       ))
     }
-  });
+  }).populate('education experience skills');
 
 }
 
@@ -68,6 +67,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
  */
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   User.findById(req.params.id, { __v: 0 }, (err: any, user: any) => {
+
     if (err) {
       res.send(failResponse('User not found', { err }));
     } else {
@@ -78,7 +78,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
         }
       ));
     }
-  });
+  }).populate('skills experience education');
 }
 
 /**

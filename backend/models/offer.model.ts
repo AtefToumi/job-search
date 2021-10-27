@@ -10,7 +10,7 @@ const OfferSchema = new Schema({
     },
     company: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Company'
+        ref:'company'
     },
     description: {
         type: String,
@@ -37,9 +37,13 @@ const OfferSchema = new Schema({
         type: String,
         required: true,
     },
-    status: {
-
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     }
+    // status: {
+
+    // }
 
 })
 

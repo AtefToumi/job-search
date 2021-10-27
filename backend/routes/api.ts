@@ -6,6 +6,8 @@ import * as OfferController from '../controllers/offer.controller';
 import * as EducationController from '../controllers/education.controller'
 import * as CompanyController from '../controllers/company.controller';
 import * as ApplicationController from '../controllers/application.controller';
+import * as ExperienceController from '../controllers/experience.controller';
+
 import {validate} from "../middlewares/validators/wrapper.validator";
 
 
@@ -91,5 +93,16 @@ export const api = (app: Express) => {
     app.put('/education/:id', EducationController.updateEducation)
     //delete a user by id
     app.delete('/education/:id', EducationController.deleteEducation)
+
+    //experience
+    app.get('/experience', ExperienceController.experienceList)
+    //return a user by id   
+    app.get('/experience/:id', ExperienceController.getExperience)
+    //register a user
+    app.post('/experience/add', ExperienceController.addExperience)
+    //update a user by id
+    app.put('/experience/:id', ExperienceController.updateExperience)
+    //delete a user by id
+    app.delete('/experience/:id', ExperienceController.deleteExperience)
 
 }

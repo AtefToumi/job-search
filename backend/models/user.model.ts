@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
+
+const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'an email is required'],
@@ -38,31 +38,40 @@ const UserSchema = new Schema({
         type: String,
         required: false
     },
-    photo:{
+    photo: {
         type: String
     },
     education: [
         {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Education'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'education'
         }
     ],
     experience: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Experience'
+            ref: 'experience'
         }
     ],
     skills: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Skill'
+            ref: 'skill'
         }
     ]
-        
-    
+
+
 
 
 });
+
+// UserSchema.pre(/^find/, function () {
+//     this.populate('skills');
+// });
+
+// UserSchema.post(/^save/, function () {
+//     this.populate('skills');
+// })
+
 
 export default mongoose.model("user", UserSchema);
