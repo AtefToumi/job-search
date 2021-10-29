@@ -9,6 +9,7 @@ import * as ApplicationController from '../controllers/application.controller';
 import * as ExperienceController from '../controllers/experience.controller';
 
 import {validate} from "../middlewares/validators/wrapper.validator";
+import extractJWT from '../middlewares/extractJWT';
 
 
 import {indexValidator} from "../middlewares/validators/index.validations";
@@ -23,6 +24,10 @@ import {userValidator} from "../middlewares/validators/user.validations";
 export const api = (app: Express) => {
     app.get('/', IndexController.index)
     app.post('/', validate(indexValidator), IndexController.indexPost)
+    app.get('/validate', extractJWT, UserController.validateToken)
+    app.post('/login', UserController.login)
+    app.post('/register', UserController.register)
+    app.get('/get/all', UserController.getUsers)
 
     //users
     //return list of users
@@ -30,7 +35,7 @@ export const api = (app: Express) => {
     //return a user by id   
     app.get('/users/:id', UserController.getUser)
     //register a user
-    app.post('/users/register',validate(userValidator), UserController.register)
+    app.post('/users/register',validate(userValidator), UserController.createUser)
     //update a user by id
     app.put('/users/:id', UserController.updateUser)
     //delete a user by id

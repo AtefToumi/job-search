@@ -1,12 +1,16 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+import IUser from '../interfaces/user.interface';
 
 
 
 const UserSchema = new mongoose.Schema({
+    username: {type: String, required: true},
+    password: {type: String, required: true},
+    
     email: {
         type: String,
-        required: [true, 'an email is required'],
-        unique: false,
+        // required: [true, 'an email is required'],
+        unique: true,
         validate: {
             validator: function (v: any) {
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
@@ -16,27 +20,22 @@ const UserSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true,
         minLength: [3, 'enter valid name']
     },
     dateOfBirth: {
         type: Date,
-        required: false,
         trim: true,
     },
     gender: {
         type: String,
-        required: true,
         enum: ['male', 'female'],
         trim: true
     },
     address: {
         type: String,
-        required: true,
     },
     phone: {
         type: String,
-        required: false
     },
     photo: {
         type: String
@@ -59,11 +58,11 @@ const UserSchema = new mongoose.Schema({
             ref: 'skill'
         }
     ]
-
-
-
-
-});
+},
+{
+    timestamps: true
+}
+);
 
 // UserSchema.pre(/^find/, function () {
 //     this.populate('skills');
