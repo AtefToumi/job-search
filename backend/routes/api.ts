@@ -1,4 +1,4 @@
-import {Express} from 'express-serve-static-core'
+import { Express } from 'express-serve-static-core'
 import * as IndexController from '../controllers/index.controller'
 import * as UserController from '../controllers/user.controller'
 import * as SkillController from '../controllers/skill.controller'
@@ -8,12 +8,19 @@ import * as CompanyController from '../controllers/company.controller';
 import * as ApplicationController from '../controllers/application.controller';
 import * as ExperienceController from '../controllers/experience.controller';
 
-import {validate} from "../middlewares/validators/wrapper.validator";
+import {
+    createSessionHandler,
+    getSessionHandler,
+    deleteSessionHandler,
+} from "../controllers/session.controller";
+import { requireUser } from "../middlewares/requireUser";
+
+import { validate } from "../middlewares/validators/wrapper.validator";
 import extractJWT from '../middlewares/extractJWT';
 
 
-import {indexValidator} from "../middlewares/validators/index.validations";
-import {userValidator} from "../middlewares/validators/user.validations";
+import { indexValidator } from "../middlewares/validators/index.validations";
+import { userValidator } from "../middlewares/validators/user.validations";
 
 
 //API Endpoints
@@ -22,12 +29,23 @@ import {userValidator} from "../middlewares/validators/user.validations";
  * @param app
  */
 export const api = (app: Express) => {
+
+    // login
+    app.post("/api/session", createSessionHandler);
+    // get the current session
+
+    app.get("/api/session", requireUser, getSessionHandler);
+    // logout
+    app.delete("/api/session", requireUser, deleteSessionHandler);
+
+
+
     app.get('/', IndexController.index)
     app.post('/', validate(indexValidator), IndexController.indexPost)
     app.get('/validate', extractJWT, UserController.validateToken)
     app.post('/login', UserController.login)
     app.post('/register', UserController.register)
-    app.get('/get/all', UserController.getUsers)
+    app.get('/get/all',extractJWT, UserController.getUsers)
 
     //users
     //return list of users
@@ -35,12 +53,12 @@ export const api = (app: Express) => {
     //return a user by id   
     app.get('/users/:id', UserController.getUser)
     //register a user
-    app.post('/users/register',validate(userValidator), UserController.createUser)
+    // app.post('/users/register',validate(userValidator), UserController.createUser)
     //update a user by id
     app.put('/users/:id', UserController.updateUser)
     //delete a user by id
     app.delete('/users/:id', UserController.deleteUser)
-    
+
     //skills
     //return list of users
     app.get('/skills', SkillController.skills)
@@ -52,20 +70,20 @@ export const api = (app: Express) => {
     app.put('/skills/:id', SkillController.getSkill)
     //delete a user by id
     app.delete('/skills/:id', SkillController.deleteSkill)
-    
-    
+
+
     //applications
     //return list of users
     app.get('/applications', ApplicationController.applications)
     //return a user by id   
     app.get('/applications/:id', ApplicationController.getApplication)
     //register a user
-    app.post('/applications/add',ApplicationController.createApplication)
+    app.post('/applications/add', ApplicationController.createApplication)
     //update a user by id
     app.put('/applications/:id', ApplicationController.updateApplication)
     //delete a user by id
     app.delete('/applications/:id', ApplicationController.deleteApplication)
-    
+
     //offers
     app.get('/offers', OfferController.offers)
     //return a user by id   
@@ -76,7 +94,7 @@ export const api = (app: Express) => {
     app.put('/offers/:id', OfferController.updateOffer)
     //delete a user by id
     app.delete('/offers/:id', OfferController.deleteOffer)
-    
+
     //company
     app.get('/companies', CompanyController.companies)
     //return a user by id   
@@ -87,7 +105,7 @@ export const api = (app: Express) => {
     app.put('/companies/:id', CompanyController.updateCompany)
     //delete a user by id
     app.delete('/companies/:id', CompanyController.deleteCompany)
-    
+
     //education
     app.get('/education', EducationController.educationList)
     //return a user by id   

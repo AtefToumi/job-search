@@ -4,9 +4,6 @@ import IUser from '../interfaces/user.interface';
 
 
 const UserSchema = new mongoose.Schema({
-    username: {type: String, required: true},
-    password: {type: String, required: true},
-    
     email: {
         type: String,
         // required: [true, 'an email is required'],
@@ -18,6 +15,9 @@ const UserSchema = new mongoose.Schema({
             message: "Please enter a valid email"
         },
     },
+    // username: {type: String, required: true},
+    password: {type: String, required: true},
+    
     name: {
         type: String,
         minLength: [3, 'enter valid name']
@@ -73,4 +73,4 @@ const UserSchema = new mongoose.Schema({
 // })
 
 
-export default mongoose.model("user", UserSchema);
+export default mongoose.model("User", UserSchema);

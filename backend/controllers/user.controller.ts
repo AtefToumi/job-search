@@ -7,7 +7,7 @@ import signJWT from '../functions/signJWT'
 
 const NAMESPACE = 'User';
 
-export const validateToken = (req: Request, res: Response, next: NextFunction) => {
+export const validateToken = (req: Request, res: Response) => {
   logging.info(NAMESPACE, 'Token validated, user authorized');
 
   return res.status(200).json({
@@ -15,10 +15,10 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
   })
 };
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
-  let { username, password } = req.body;
+export const login = (req: Request, res: Response) => {
+  let { email, password} = req.body;
 
-  User.find({ username })
+  User.find({ email })
     .exec()
     .then((users: any) => {
       if (users.length !== 1) {
@@ -31,7 +31,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
           logging.error(NAMESPACE, error.message, error);
 
           return res.status(401).json({
-            message: 'Unauthrozied'
+            message: 'Password incorrect'
           })
         }
         else if (result) {
@@ -44,13 +44,14 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
                 error: _error
               })
             }
-            else if (token) {{
-              return res.status(200).json({
-                message: 'Auth successful',
-                token,
-                user: users[0]
-              })
-            }}
+            else if (token) {
+              {
+                return res.status(200).json({
+                  message: 'Auth successful',
+                  token
+                })
+              }
+            }
           });
         }
       })
@@ -59,28 +60,32 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
       return res.status(500).json({
         message: error.message,
         error
+      });
     });
-  });
 };
-export const getUsers = (req: Request, res: Response, next: NextFunction) => { 
+
+
+export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find()
-  .select('-password')
-  .exec()
-  .then((users:any) => {
-    return res.status(200).json({
-      users,
-      count: users.length
+    .select('-password')
+    .exec()
+    .then((users: any) => {
+      return res.status(200).json({
+        users,
+        count: users.length
+      })
     })
-  })
-  .catch((error: any) => {
-    return res.status(500).json({
-      message: error.message,
-      error
-  });
-});
+    .catch((error: any) => {
+      return res.status(500).json({
+        message: error.message,
+        error
+      });
+    });
 };
-export const register = (req: Request, res: Response, next: NextFunction) => {
-  let { username, password } = req.body;
+
+
+export const register = (req: Request, res: Response) => {
+  let { email, password, name, dateOfBirth, gender, address, phone} = req.body;
 
   bcryptjs.hash(password, 10, (hashError, hash) => {
     if (hashError) {
@@ -90,14 +95,19 @@ export const register = (req: Request, res: Response, next: NextFunction) => {
       });
     }
     const _user = new User({
-      username,
-      password: hash
+      email,
+      password: hash,
+      name, 
+      dateOfBirth, 
+      gender, 
+      address,
+      phone 
     });
 
     return _user.save()
       .then((user: any) => {
         return res.status(201).json({
-          user
+          id : user._id
         });
       }).catch((error: any) => {
         return res.status(500).json({
@@ -137,34 +147,32 @@ export const users = async (req: Request, res: Response): Promise<void> => {
  * @param res
  * @returns {Promise<void>}
  */
-export const createUser = async (req: Request, res: Response): Promise<void> => {
-  // console.log(Skill.findOne({_id: req.body.skills}).populate('skills','title').lean())
-  const user = new User({
-    email: req.body.email,
-    name: req.body.name,
-    dateOfBirth: new Date(req.body.dateOfBirth),
-    gender: req.body.gender,
-    address: req.body.address,
-    phone: req.body.phone,
-    skills: req.body.skills,
-    // skills: Skill.findOne({skill: req.body.skills._id}).populate('skills','title')
+// export const createUser = async (req: Request, res: Response): Promise<void> => {
+//   // console.log(Skill.findOne({_id: req.body.skills}).populate('skills','title').lean())
+//   const user = new User({
+//     email: req.body.email,
+//     name: req.body.name,
+//     dateOfBirth: new Date(req.body.dateOfBirth),
+//     gender: req.body.gender,
+//     address: req.body.address,
+//     phone: req.body.phone,
+//     skills: req.body.skills,
+//     // skills: Skill.findOne({skill: req.body.skills._id}).populate('skills','title')
+//   });
 
-
-  });
-
-  user.save((err: any) => {
-    if (err) {
-      res.send(failResponse('error', { message: err.message }))
-    } else {
-      res.send(successResponse(
-        'User created successfully!',
-        {
-          data: (user)
-        }
-      ))
-    }
-  });
-}
+//   user.save((err: any) => {
+//     if (err) {
+//       res.send(failResponse('error', { message: err.message }))
+//     } else {
+//       res.send(successResponse(
+//         'User created successfully!',
+//         {
+//           data: (user)
+//         }
+//       ))
+//     }
+//   });
+// }
 
 /**
  *
