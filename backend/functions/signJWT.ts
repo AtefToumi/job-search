@@ -2,7 +2,7 @@ import { sign } from 'crypto';
 import jwt from 'jsonwebtoken';
 import config from '../config/config'
 import logging from '../config/logging'
-import IUser from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 const NAMESPACE = 'Auth';
 
@@ -17,11 +17,11 @@ const signJWT = (user: IUser, callback: (error: Error | null, token: string | nu
         jwt.sign(
             {
                 email: user.email,
-                name: user.name,
-                dateOfBirth: user.dateOfBirth,
-                gender: user.gender,
-                address: user.address,
-                phone: user.phone
+                // name: user.name,
+                // dateOfBirth: user.dateOfBirth,
+                // gender: user.gender,
+                // address: user.address,
+                // phone: user.phone
             },
             config.server.token.secret,
             {

@@ -15,12 +15,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app;
+//@ts-ignore
 if (firebase.apps.length == 0) {
   app = firebase.initializeApp(firebaseConfig);
 } else {
   app = firebase.app();
 }
 
+//@ts-ignore
 const auth = firebase.auth();
 
 export { auth };

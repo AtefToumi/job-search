@@ -8,5 +8,4 @@ export const userValidator: ValidationChain[] = [
         .exists()
         .isEmail()
         .withMessage('email is invalid'),
-
 ]

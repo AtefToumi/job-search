@@ -8,6 +8,7 @@ import * as CompanyController from '../controllers/company.controller';
 import * as ApplicationController from '../controllers/application.controller';
 import * as ExperienceController from '../controllers/experience.controller';
 
+
 import {
     createSessionHandler,
     getSessionHandler,
@@ -38,14 +39,15 @@ export const api = (app: Express) => {
     // logout
     app.delete("/api/session", requireUser, deleteSessionHandler);
 
-
+    app.post('/new/create', UserController.registerUser);
+    app.post('/new/login', UserController.loginUser);
 
     app.get('/', IndexController.index)
     app.post('/', validate(indexValidator), IndexController.indexPost)
     app.get('/validate', extractJWT, UserController.validateToken)
     app.post('/login', UserController.login)
     app.post('/register', UserController.register)
-    app.get('/get/all',extractJWT, UserController.getUsers)
+    app.get('/get/all', extractJWT, UserController.getUsers)
 
     //users
     //return list of users
