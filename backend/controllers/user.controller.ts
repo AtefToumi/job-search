@@ -1,12 +1,9 @@
 import e, { Request, Response, NextFunction } from 'express';
 import { successResponse, failResponse } from '../helpers/methods';
 import bcryptjs from 'bcryptjs';
-import bcrypt from 'bcrypt';
 import User from '../models/user.model';
 import logging from '../config/logging';
 import signJWT from '../functions/signJWT';
-import { IUser } from '../interfaces/user.interface';
-const jwt = require("jsonwebtoken");
 
 const NAMESPACE = 'User';
 
@@ -234,109 +231,3 @@ export let deleteUser = async (req: Request, res: Response): Promise<void> => {
     }
   });
 };
-
-
-let refreshTokens: string[] = [];
-
-const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<e.Response<any, Record<string, any>>> => {
-  try {
-    const { email, password } = req.body;
-    if (!(email && password)) {
-      return res.status(400).send("All inputs are required");
-    }
-
-    // Checking if the user already exists
-
-    const oldUser = await User.findOne({ email });
-
-    if (oldUser) {
-      return res.status(400).send("User Already Exist. Please Login");
-    }
-
-    const user: IUser = new User({
-      email: email,
-    });
-
-    const salt = await bcrypt.genSalt(10);
-    // now we set user password to hashed password
-    user.password = await bcrypt.hash(password, salt);
-
-    user.save().then((doc) => {
-      // Generating Access and refresh token
-      const token = jwt.sign(
-        { user_id: doc._id, email: email },
-        process.env.JWT_SECRET_KEY,
-        {
-          expiresIn: "5min",
-        }
-      );
-
-      const refreshToken = jwt.sign(
-        { user_id: doc._id, email: email },
-        process.env.JWT_SECRET_KEY
-      );
-
-      refreshTokens.push(refreshToken);
-
-      return res.status(201).json({
-        user: doc,
-        token: token,
-        refresh: refreshToken,
-      });
-    });
-
-    return res.status(400).send("Unable to create user");
-  } catch (error) {
-    throw error;
-  }
-};
-
-const loginUser = async (
-  req: Request,
-  res: Response
-): Promise<e.Response<any, Record<string, any>>> => {
-  try {
-    const { email, password } = req.body;
-    if (!(email && password)) {
-      return res.status(400).send("All inputs are required");
-    }
-
-    // Checking if the user exists
-
-    const user: IUser | null = await User.findOne({ email });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-      // Create token
-      const token = jwt.sign(
-        { user_id: user._id, email: email },
-        process.env.JWT_SECRET_KEY,
-        {
-          expiresIn: "5min",
-        }
-      );
-
-      const refreshToken = jwt.sign(
-        { user_id: user._id, email: email },
-        process.env.JWT_SECRET_KEY
-      );
-
-      refreshTokens.push(refreshToken);
-
-      // user
-      return res.status(200).json({
-        user: user,
-        token: token,
-        refresh: refreshToken,
-      });
-    }
-
-    return res.status(400).send("Invalid Credentials");
-  } catch (error) {
-    throw error;
-  }
-};
-
-export { registerUser, loginUser };

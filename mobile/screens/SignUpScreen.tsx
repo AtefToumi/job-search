@@ -10,21 +10,21 @@ import {
   Image,
   AspectRatio,
 } from "native-base";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { alignContent, flex, flexDirection, width } from "styled-system";
 
-function Login() {
+function Signup() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.Middle}>
-        <Text style={styles.LoginText}>Login</Text>
+        <Text style={styles.LoginText}>Signup</Text>
       </View>
       <View style={styles.text2}>
-        <Text>Don't have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-          <Text style={styles.signupText}> Sign up</Text>
+        <Text>Already have account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.signupText}> Login </Text>
         </TouchableOpacity>
       </View>
 
@@ -46,7 +46,36 @@ function Login() {
               />
             }
             variant="outline"
-            placeholder="Username or Email"
+            placeholder="Username"
+            _light={{
+              placeholderTextColor: "blueGray.400",
+            }}
+            _dark={{
+              placeholderTextColor: "blueGray.50",
+            }}
+          />
+        </View>
+      </View>
+
+      {/* Username or Email Input Field */}
+      <View style={styles.buttonStyleX}>
+        <View style={styles.emailInput}>
+          <Input
+            InputLeftElement={
+              <Icon
+                as={<MaterialCommunityIcons name="email" />}
+                size="sm"
+                m={2}
+                _light={{
+                  color: "black",
+                }}
+                _dark={{
+                  color: "gray.300",
+                }}
+              />
+            }
+            variant="outline"
+            placeholder="Email"
             _light={{
               placeholderTextColor: "blueGray.400",
             }}
@@ -87,17 +116,49 @@ function Login() {
         </View>
       </View>
 
+      {/* Password Input Field */}
+      <View style={styles.buttonStyleX}>
+        <View style={styles.emailInput}>
+          <Input
+            InputLeftElement={
+              <Icon
+                as={<FontAwesome5 name="key" />}
+                size="sm"
+                m={2}
+                _light={{
+                  color: "black",
+                }}
+                _dark={{
+                  color: "gray.300",
+                }}
+              />
+            }
+            variant="outline"
+            secureTextEntry={true}
+            placeholder="Confirm Password"
+            _light={{
+              placeholderTextColor: "blueGray.400",
+            }}
+            _dark={{
+              placeholderTextColor: "blueGray.50",
+            }}
+          />
+        </View>
+      </View>
+
       {/* Button */}
       <View style={styles.buttonStyle}>
-        <Button style={styles.buttonDesign}>LOGIN</Button>
+        <Button style={styles.buttonDesign}>REGISTER NOW</Button>
       </View>
 
       {/* Line */}
-      <View style={styles.lineStyle}>
+      {/* <View style={styles.lineStyle}>
         <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
-        <View></View>
+        <View>
+          <Text style={{ width: 50, textAlign: "center" }}>Or</Text>
+        </View>
         <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
-      </View>
+      </View> */}
 
       {/* Box */}
       <View style={styles.boxStyle}></View>
@@ -109,7 +170,7 @@ function Login() {
 export default () => {
   return (
     <NativeBaseProvider>
-      <Login />
+      <Signup />
     </NativeBaseProvider>
   );
 };
@@ -120,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   LoginText: {
-    marginTop: 300,
+    marginTop: 100,
     fontSize: 30,
     fontWeight: "bold",
   },

@@ -8,14 +8,6 @@ import * as CompanyController from '../controllers/company.controller';
 import * as ApplicationController from '../controllers/application.controller';
 import * as ExperienceController from '../controllers/experience.controller';
 
-
-import {
-    createSessionHandler,
-    getSessionHandler,
-    deleteSessionHandler,
-} from "../controllers/session.controller";
-import { requireUser } from "../middlewares/requireUser";
-
 import { validate } from "../middlewares/validators/wrapper.validator";
 import extractJWT from '../middlewares/extractJWT';
 
@@ -31,16 +23,6 @@ import { userValidator } from "../middlewares/validators/user.validations";
  */
 export const api = (app: Express) => {
 
-    // login
-    app.post("/api/session", createSessionHandler);
-    // get the current session
-
-    app.get("/api/session", requireUser, getSessionHandler);
-    // logout
-    app.delete("/api/session", requireUser, deleteSessionHandler);
-
-    app.post('/new/create', UserController.registerUser);
-    app.post('/new/login', UserController.loginUser);
 
     app.get('/', IndexController.index)
     app.post('/', validate(indexValidator), IndexController.indexPost)

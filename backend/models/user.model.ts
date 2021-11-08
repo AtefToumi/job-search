@@ -1,9 +1,9 @@
 import { IUser } from "../interfaces/user.interface";
-import { model, Schema } from "mongoose";
-import mongoose from "mongoose"
-import bcrypt from 'bcrypt';
+const mongoose = require('mongoose')
 
-const UserSchema: Schema = new Schema({
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
     email: {
         type: String,
         // required: [true, 'an email is required'],
@@ -64,40 +64,6 @@ const UserSchema: Schema = new Schema({
     }
 );
 
-UserSchema.statics.isThisEmailInUse = async function (email) {
-    if (!email) throw new Error('Invalid Email');
-    try {
-        const user = await this.findOne({ email });
-        if (user) return false;
-
-        return true;
-    } catch (error: any) {
-        console.log('error inside isThisEmailInUse method', error.message);
-        return false;
-    }
-};
-
-UserSchema.pre('save', function (next) {
-    if (this.isModified('password')) {
-        bcrypt.hash(this.password, 8, (err, hash) => {
-            if (err) return next(err);
-
-            this.password = hash;
-            next();
-        })
-    }
-});
-
-UserSchema.methods.comparePassword = async function (password) {
-    if (!password) throw new Error('password missing');
-
-    try {
-        const result = await bcrypt.compare(password, this.password)
-        return result;
-    } catch (error: any) {
-        console.log(error.message)
-    }
-}
 // UserSchema.pre(/^find/, function () {
 //     this.populate('skills');
 // });
@@ -105,4 +71,4 @@ UserSchema.methods.comparePassword = async function (password) {
 // UserSchema.post(/^save/, function () {
 //     this.populate('skills');
 // })
-export default model<IUser>("User", UserSchema);
+export default mongoose.model("user", UserSchema);

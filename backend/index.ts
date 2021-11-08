@@ -1,6 +1,5 @@
 require('dotenv').config()
 import errorMiddleware from './middlewares/error.middleware'
-import deserializeUser from "./middlewares/deserializeUser"
 import cookieParser from "cookie-parser"
 
 
@@ -18,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(deserializeUser)
 api(app)
 
 //connect to local db
