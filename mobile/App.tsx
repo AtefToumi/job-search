@@ -5,22 +5,35 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/SignUpScreen";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import Splash from "./Splash";
+import RootStack from "./RootStack";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let x = 1;
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* <Stack.Screen
+          options={{ headerShown: false }}
+          name="Splash"
+          component={Splash}
+        /> */}
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
+          name="SignIn"
+          component={SignIn}
         />
-        <Stack.Screen name="Signup" component={HomeScreen} />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SignUp"
+          component={SignUp}
+        />
       </Stack.Navigator>
     </NavigationContainer>
+    // <RootStack />
   );
 }
 

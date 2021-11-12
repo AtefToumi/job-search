@@ -28,8 +28,8 @@ export const login = (req: Request, res: Response) => {
       }
       bcryptjs.compare(password, users[0].password, (error, result) => {
         if (error) {
-          logging.error(NAMESPACE, error.message, error);
-
+          // logging.error(NAMESPACE, error.message, error);
+          console.log(error)
           return res.status(401).json({
             message: 'Password incorrect'
           })
@@ -53,6 +53,11 @@ export const login = (req: Request, res: Response) => {
               }
             }
           });
+        }
+        else {
+          res.status(401).json({
+            message: "password incorrect"
+          })
         }
       })
     })
