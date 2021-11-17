@@ -17,10 +17,10 @@ export const validateToken = (req: Request, res: Response) => {
 
 export const login = (req: Request, res: Response) => {
   let { email, password } = req.body;
-
   User.find({ email })
     .exec()
     .then((users: any) => {
+      console.log(email)
       if (users.length !== 1) {
         return res.status(401).json({
           message: 'Unauthorized'
@@ -31,7 +31,7 @@ export const login = (req: Request, res: Response) => {
           // logging.error(NAMESPACE, error.message, error);
           console.log(error)
           return res.status(401).json({
-            message: 'Password incorrect'
+            message: password
           })
         }
         else if (result) {
@@ -56,7 +56,7 @@ export const login = (req: Request, res: Response) => {
         }
         else {
           res.status(401).json({
-            message: "password incorrect"
+            message: "Invalid"
           })
         }
       })

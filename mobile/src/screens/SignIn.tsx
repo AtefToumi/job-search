@@ -1,43 +1,34 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  Button,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
-import { Ionicons } from "@expo/vector-icons";
-
 import { Formik } from "formik";
 import * as yup from "yup";
-import client from "./api/client";
-import { useNavigation } from "@react-navigation/native";
+import client from "../api/client";
+import { StoreContext } from "../store.context";
+import { observer } from "mobx-react-lite";
 
-function SignIn() {
-  const navigation = useNavigation();
-
+//@ts-ignore
+const SignIn = ({ navigation }) => {
+  const { authStore } = useContext(StoreContext);
+  const [data, setData] = useState({
+    password: "",
+    check_textInputChange: false,
+    secureTextEntry: true,
+    isValidPassword: true,
+  });
   const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .label("Email")
-      .email()
-      .required("Please enter your Email"),
-    password: yup
-      .string()
-      .label("Password")
-      .required("Please enter your Password"),
+    email: yup.string().label("E-mail").email().required(),
+    password: yup.string().label("Password").required(),
   });
   const login = async (values: any, formikActions: any) => {
     const res = await client.post("/login", {
       ...values,
     });
+    console.log(values);
     console.log(res);
     // if (res.data.success) {
     //   const loginRes = await client.post("login", {
@@ -50,15 +41,20 @@ function SignIn() {
     formikActions.resetForm();
     formikActions.setSubmitting(false);
   };
+
+  const updateSecureTextEntry = () => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
+  };
+
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values, actions) => {
-        console.log(JSON.stringify(values));
-        // setTimeout(() => {
-        //   actions.setSubmitting(false);
-        // }, 1000);
-        login(values, actions);
+      onSubmit={(values) => {
+        console.log(values);
+        authStore.login(values);
       }}
       validationSchema={validationSchema}
     >
@@ -75,17 +71,9 @@ function SignIn() {
                 <TextInput
                   placeholder="Enter your email.."
                   style={styles.textInput}
-                  onChangeText={
-                    // console.log(">>>>>>>>>", email);// this.textInputChange(email);
-                    formikProps.handleChange("email")
-                  }
+                  onChangeText={formikProps.handleChange("email")}
                   onBlur={formikProps.handleBlur("email")}
                 />
-                {/* {this.state.check_textInputChange ? (
-                    <Animatable.View animation="bounceIn">
-                      <Feather name="check-circle" color="green" size={20} />
-                    </Animatable.View>
-                  ) : null} */}
               </View>
               <Text style={{ color: "red" }}>
                 {formikProps.touched.email && formikProps.errors.email}
@@ -97,18 +85,37 @@ function SignIn() {
                 <Feather name="lock" color="#159c51" size={20} />
                 <TextInput
                   placeholder="Enter your password"
-                  secureTextEntry={true}
+                  secureTextEntry={data.secureTextEntry ? true : false}
                   style={styles.textInput}
+                  autoCapitalize="none"
                   onChangeText={formikProps.handleChange("password")}
                   onBlur={formikProps.handleBlur("password")}
                 />
+                <TouchableOpacity onPress={updateSecureTextEntry}>
+                  {data.secureTextEntry ? (
+                    <Feather
+                      name="eye-off"
+                      color="grey"
+                      size={20}
+                      //style={sig.iconEye}
+                    />
+                  ) : (
+                    <Feather
+                      name="eye"
+                      color="grey"
+                      size={20}
+                      // style={sig.iconEye}
+                    />
+                  )}
+                </TouchableOpacity>
               </View>
               <Text style={{ color: "red" }}>
                 {formikProps.touched.password && formikProps.errors.password}
               </Text>
-              <View style={styles.button}>
+              <View>
                 <TouchableOpacity
-                  type="submit"
+                  style={styles.button}
+                  //@ts-ignore
                   onPress={formikProps.handleSubmit}
                 >
                   <LinearGradient
@@ -142,11 +149,11 @@ function SignIn() {
       )}
     </Formik>
   );
-}
-
-export default () => {
-  return <SignIn />;
 };
+
+const Auth = observer(SignIn);
+export { Auth };
+
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -160,14 +167,14 @@ var styles = StyleSheet.create({
   },
   footer: {
     flex: 3,
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
   text_header: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     fontSize: 40,
   },
@@ -199,7 +206,7 @@ var styles = StyleSheet.create({
     borderRadius: 20,
   },
   signIn: {
-    width: 300,
+    width: "100%",
     height: 50,
     justifyContent: "center",
     alignItems: "center",

@@ -12,15 +12,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/core";
 
-function Splash() {
-  const navigation = useNavigation();
+const Home = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.header}>
         <Animatable.Image
           animation="bounceIn"
-          source={require("./assets/js-logo.png")}
+          source={require("../../assets/js-logo.png")}
           style={styles.logo}
           resizeMode="stretch"
         />
@@ -29,25 +28,13 @@ function Splash() {
         <Text style={styles.title}>
           Find the best Job for you all around the World!
         </Text>
-        <Text style={styles.text}>Sign in with existing account</Text>
-        <View style={styles.button}>
-          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-            <LinearGradient
-              colors={["#159c51", "#64e19c"]}
-              style={styles.signIn}
-            >
-              <Text style={styles.textSign}>Get Started</Text>
-              <MaterialIcons name="navigate-next" color="white" size={20} />
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
       </Animatable.View>
     </View>
   );
-}
+};
 
 export default () => {
-  return <Splash />;
+  return <Home />;
 };
 
 const { height } = Dimensions.get("screen");
@@ -64,7 +51,7 @@ var styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingVertical: 50,
