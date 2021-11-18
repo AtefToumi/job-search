@@ -167,14 +167,14 @@ var styles = StyleSheet.create({
   },
   footer: {
     flex: 3,
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
   text_header: {
-    color: "black",
+    color: "white",
     fontWeight: "bold",
     fontSize: 40,
   },

@@ -1,6 +1,6 @@
-import { LoginRequest } from './../dto/request/login-request.dto';
 import { makeAutoObservable } from "mobx";
 import { AuthService } from "../services/auth.service";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class AuthStore {
     private authenticated = false;
@@ -13,7 +13,7 @@ export class AuthStore {
     async login(values: { email: string, password: string }) {
         try {
             const tokenPayloadDto = await this.authService.login(values);
-            localStorage.setItem("access_token", tokenPayloadDto.token);
+            AsyncStorage.setItem("access_token", tokenPayloadDto.token);
             this.setAuthenticated(true);
         } catch (err) {
             this.setAuthenticated(false);
@@ -24,7 +24,7 @@ export class AuthStore {
         this.authenticated = authenticated;
     }
     getAccessToken() {
-        return localStorage.getItem("access_token");
+        return AsyncStorage.getItem("access_token");
     }
 
     isAuthenticated() {

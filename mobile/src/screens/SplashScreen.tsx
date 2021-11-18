@@ -12,7 +12,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/core";
 
-const Home = () => {
+//@ts-ignore
+const Splash = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -28,14 +29,24 @@ const Home = () => {
         <Text style={styles.title}>
           Find the best Job for you all around the World!
         </Text>
+        <Text style={styles.text}>Sign in with existing account</Text>
+        <View style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <LinearGradient
+              colors={["#159c51", "#64e19c"]}
+              style={styles.signIn}
+            >
+              <Text style={styles.textSign}>Get Started</Text>
+              <MaterialIcons name="navigate-next" color="white" size={20} />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </Animatable.View>
     </View>
   );
 };
 
-export default () => {
-  return <Home />;
-};
+export default Splash;
 
 const { height } = Dimensions.get("screen");
 const height_logo = height * 0.7 * 0.5;
@@ -51,7 +62,7 @@ var styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingVertical: 50,

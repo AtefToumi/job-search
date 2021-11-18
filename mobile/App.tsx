@@ -1,46 +1,33 @@
-import React, { useContext } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+
+import GeneralStack from "./src/navigation/GeneralStack";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Auth } from "./src/screens/SignIn";
-import SignUp from "./src/screens/SignUp";
-import Splash from "./src/screens/Splash";
-import { StoreContext } from "./src/store.context";
+import HomeTabs from "./src/navigation/navigator";
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <GeneralStack />
+//     </NavigationContainer>
+//     // <RootStack />
+//   );
+// }
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-  const { authStore } = useContext(StoreContext);
-  const authenticated = authStore.isAuthenticated();
+function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Splash"
-          component={Splash}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="SignIn"
-          component={Auth}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="SignUp"
-          component={SignUp}
-        />
+      <Stack.Navigator
+        initialRouteName={"HomeTabs"}
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="HomeTabs" component={HomeTabs} />
       </Stack.Navigator>
     </NavigationContainer>
-    // <RootStack />
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;

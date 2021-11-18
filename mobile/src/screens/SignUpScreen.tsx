@@ -179,6 +179,7 @@ function SignUp({}) {
               <View>
                 <TouchableOpacity
                   style={styles.button}
+                  //@ts-ignore
                   onPress={formikProps.handleSubmit}
                 >
                   <LinearGradient
