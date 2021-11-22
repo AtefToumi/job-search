@@ -23,6 +23,7 @@ export class AuthStore {
     private setAuthenticated(authenticated: boolean) {
         this.authenticated = authenticated;
     }
+
     getAccessToken() {
         return AsyncStorage.getItem("access_token");
     }

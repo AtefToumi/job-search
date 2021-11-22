@@ -1,11 +1,14 @@
 const colors = {
     white: '#ffffff',
     lightWhite: '#f0f0f0',
-    black: '#000000',
+    black: '#030D16',
     lightBlack: '#252525',
     orange: '#fa5805',
     silver: '#bdc3c7',
-    gray: '#636e72'
+    gray: '#636e72',
+    lightgray: '#333B42',
+    dark: '#182028',
+    green: "#159c51"
 }
 
 const sizes = {

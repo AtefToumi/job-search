@@ -10,7 +10,6 @@ import {
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/core";
 
 //@ts-ignore
 const Splash = ({ navigation }) => {
@@ -37,7 +36,7 @@ const Splash = ({ navigation }) => {
               style={styles.signIn}
             >
               <Text style={styles.textSign}>Get Started</Text>
-              <MaterialIcons name="navigate-next" color="white" size={20} />
+              <MaterialIcons name="navigate-next" color="#333B42" size={20} />
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -62,7 +61,7 @@ var styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#333B42",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingVertical: 50,
@@ -94,7 +93,7 @@ var styles = StyleSheet.create({
     flexDirection: "row",
   },
   textSign: {
-    color: "white",
+    color: "#333B42",
     fontWeight: "bold",
   },
 });

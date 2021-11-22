@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -7,13 +7,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import { Formik } from "formik";
 import * as yup from "yup";
-import client from "../api/client";
 import { StoreContext } from "../store.context";
 import { observer } from "mobx-react-lite";
+import { colors } from "../constants/theme";
 
 //@ts-ignore
 const SignIn = ({ navigation }) => {
   const { authStore } = useContext(StoreContext);
+  const authenticated = authStore.isAuthenticated();
   const [data, setData] = useState({
     password: "",
     check_textInputChange: false,
@@ -24,23 +25,6 @@ const SignIn = ({ navigation }) => {
     email: yup.string().label("E-mail").email().required(),
     password: yup.string().label("Password").required(),
   });
-  const login = async (values: any, formikActions: any) => {
-    const res = await client.post("/login", {
-      ...values,
-    });
-    console.log(values);
-    console.log(res);
-    // if (res.data.success) {
-    //   const loginRes = await client.post("login", {
-    //     email: values.email,
-    //     password: values.password,
-    //   });
-
-    // }
-
-    formikActions.resetForm();
-    formikActions.setSubmitting(false);
-  };
 
   const updateSecureTextEntry = () => {
     setData({
@@ -48,6 +32,10 @@ const SignIn = ({ navigation }) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+
+  useEffect(() => {
+    console.log(">>>> isAuthenticated", authenticated);
+  }, [authStore]);
 
   return (
     <Formik
@@ -67,7 +55,7 @@ const SignIn = ({ navigation }) => {
             <Animatable.View animation="fadeInUpBig" style={styles.footer}>
               <Text style={styles.text_footer}>E-mail</Text>
               <View style={styles.action}>
-                <FontAwesome name="user" color="#159c51" size={20} />
+                <FontAwesome name="user" color={colors.green} size={20} />
                 <TextInput
                   placeholder="Enter your email.."
                   style={styles.textInput}
@@ -75,14 +63,14 @@ const SignIn = ({ navigation }) => {
                   onBlur={formikProps.handleBlur("email")}
                 />
               </View>
-              <Text style={{ color: "red" }}>
+              <Text style={{ color: "grey" }}>
                 {formikProps.touched.email && formikProps.errors.email}
               </Text>
               <Text style={[styles.text_footer, { marginTop: 20 }]}>
                 Password
               </Text>
               <View style={styles.action}>
-                <Feather name="lock" color="#159c51" size={20} />
+                <Feather name="lock" color={colors.green} size={20} />
                 <TextInput
                   placeholder="Enter your password"
                   secureTextEntry={data.secureTextEntry ? true : false}
@@ -109,7 +97,7 @@ const SignIn = ({ navigation }) => {
                   )}
                 </TouchableOpacity>
               </View>
-              <Text style={{ color: "red" }}>
+              <Text style={{ color: "grey" }}>
                 {formikProps.touched.password && formikProps.errors.password}
               </Text>
               <View>
@@ -119,10 +107,10 @@ const SignIn = ({ navigation }) => {
                   onPress={formikProps.handleSubmit}
                 >
                   <LinearGradient
-                    colors={["#159c51", "#64e19c"]}
+                    colors={[colors.black, colors.lightgray]}
                     style={styles.signIn}
                   >
-                    <Text style={[styles.textSign, { color: "white" }]}>
+                    <Text style={[styles.textSign, { color: colors.green }]}>
                       Sign in
                     </Text>
                   </LinearGradient>
@@ -132,7 +120,7 @@ const SignIn = ({ navigation }) => {
                   style={[
                     styles.signUp,
                     {
-                      borderColor: "#159c51",
+                      borderColor: colors.lightgray,
                       borderWidth: 1,
                       marginTop: 15,
                     },
@@ -157,7 +145,7 @@ export { Auth };
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#64e19c",
+    backgroundColor: colors.black,
   },
   header: {
     flex: 1,
@@ -166,33 +154,34 @@ var styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 3,
-    backgroundColor: "white",
+    flex: 2,
+    backgroundColor: colors.dark,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    borderBottomEndRadius: 50,
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
   text_header: {
-    color: "white",
+    color: colors.gray,
     fontWeight: "bold",
     fontSize: 40,
   },
   text_footer: {
-    color: "#159c51",
+    color: colors.gray,
     fontSize: 20,
   },
   action: {
     flexDirection: "row",
     marginTop: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#159c51",
+    borderBottomColor: colors.gray,
     paddingBottom: 15,
   },
   textInput: {
     flex: 1,
     paddingLeft: 10,
-    color: "#159c51",
+    color: colors.gray,
   },
   button: {
     alignItems: "center",
