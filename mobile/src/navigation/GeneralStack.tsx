@@ -9,20 +9,20 @@ const Stack = createNativeStackNavigator();
 const GeneralStack = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false }}
         name="Home"
         component={Home}
-      /> */}
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SignIn"
-        component={Auth}
       />
       <Stack.Screen
         options={{ headerShown: false }}
         name="Splash"
         component={Splash}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="SignIn"
+        component={Auth}
       />
 
       {/* <Stack.Screen

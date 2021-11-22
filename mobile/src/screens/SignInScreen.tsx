@@ -14,7 +14,6 @@ import { colors } from "../constants/theme";
 //@ts-ignore
 const SignIn = ({ navigation }) => {
   const { authStore } = useContext(StoreContext);
-  const authenticated = authStore.isAuthenticated();
   const [data, setData] = useState({
     password: "",
     check_textInputChange: false,
@@ -33,16 +32,14 @@ const SignIn = ({ navigation }) => {
     });
   };
 
-  useEffect(() => {
-    console.log(">>>> isAuthenticated", authenticated);
-  }, [authStore]);
-
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       onSubmit={(values) => {
         console.log(values);
-        authStore.login(values);
+        authStore.login(values).then(() => {
+          navigation.navigate("Home");
+        });
       }}
       validationSchema={validationSchema}
     >
