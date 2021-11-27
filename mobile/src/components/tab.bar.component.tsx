@@ -1,7 +1,7 @@
 import React from "react";
 
 import { View, Pressable, Dimensions, StyleSheet } from "react-native";
-import NavigationIcon from "./navigationIcon";
+import NavigationIcon from "../navigation/navigationIcon";
 
 const { width } = Dimensions.get("window");
 

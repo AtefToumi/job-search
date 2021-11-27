@@ -14,6 +14,8 @@ const CompanySchema = new Schema({
     logo: {
 
     }
+}, {
+    timestamps: true
 })
 
 export default mongoose.model("company", CompanySchema);

@@ -72,6 +72,8 @@ export const api = (app: Express) => {
     app.get('/offers', OfferController.offers)
     //return a user by id   
     app.get('/offers/:id', OfferController.getOffer)
+    //return recent added offers
+    app.get('/recentoffers/', OfferController.getRecentOffers)
     //register a user
     app.post('/offers/add', OfferController.addOffer)
     //update a user by id

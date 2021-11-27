@@ -1,7 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
@@ -10,7 +8,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
-import TabBar from "./tabBar";
+import TabBar from "../components/tab.bar.component";
 
 function HomeTabs() {
   return (

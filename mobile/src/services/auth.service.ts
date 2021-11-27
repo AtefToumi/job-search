@@ -18,19 +18,4 @@ export class AuthService {
 
         return parsedResponse;
     }
-    // const response = await client.post("/login", {
-    //     ...loginRequest.values,
-    // })
-    // const parsedResponse = response.data;
-    // console.log(parsedResponse)
-    // if (!response.data.success) {
-    //     throw new Error(parsedResponse);
-    // }
-    // return response;
-    // const login = async (values: any, formikActions: any) => {
-    //     const res = await client.post("/login", {
-    //       ...values,
-    //     });
-    //     console.log(res);
-    // }
 }

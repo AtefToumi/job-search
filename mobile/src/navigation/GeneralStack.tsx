@@ -4,6 +4,7 @@ import { Auth } from "../screens/SignInScreen";
 import SignUp from "../screens/SignUpScreen";
 import Splash from "../screens/SplashScreen";
 import Home from "../screens/HomeScreen";
+import HomeTabs from "../navigation/navigator";
 
 const Stack = createNativeStackNavigator();
 const GeneralStack = () => {
@@ -25,11 +26,11 @@ const GeneralStack = () => {
         component={Auth}
       />
 
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false }}
         name="SignUp"
         component={SignUp}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,32 +1,53 @@
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable } from "mobx";
 import { AuthService } from "../services/auth.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from "jwt-decode"
+import IUser from "../types/user.type";
+
 
 export class AuthStore {
   public authenticated = false;
+  public userName: any = "";
 
   constructor(private readonly authService: AuthService) {
     makeAutoObservable(this);
-    this.getAccessToken().then((result) => {
+    this.isAccessToken().then(action((result) => {
       this.authenticated = result;
-    });
+    }));
+    this.getUserName().then(action(((result => {
+      this.userName = result
+    }))))
   }
 
   async login(values: { email: string; password: string }) {
     try {
-      //   const tokenPayloadDto = await this.authService.login(values);
+      const tokenPayloadDto = await this.authService.login(values);
+
       await AsyncStorage.setItem(
         "access_token",
-        `eyJhbGciOiJIUZI1NiIsInR5CCI6IkpXVCJ9.
-      eyJzdWIiOiIxMjMONTY3ODkwIiwibmFtZSI6IkpvaG4
-      GRG9lIiwiaXNTb2NpYWwionRydWv9.
-      4pcPyMDO901PSyXnrXCjTwXyr4Bsezd11AVTmud2fU4`
+        tokenPayloadDto.token
       );
       this.setAuthenticated(true);
     } catch (err) {
       this.setAuthenticated(false);
     }
   }
+
+  async getUserName() {
+    try {
+      const storedToken = await AsyncStorage.getItem("access_token");
+      if (storedToken) {
+        const decodedData: IUser = jwt_decode(storedToken)
+        const userName = decodedData.name;
+        console.log(decodedData)
+        return userName
+      }
+    } catch (err) {
+      return err
+    }
+  }
+
+
 
   async logout() {
     try {
@@ -41,7 +62,8 @@ export class AuthStore {
     this.authenticated = authenticated;
   }
 
-  async getAccessToken() {
+
+  async isAccessToken() {
     try {
       const value = await AsyncStorage.getItem("access_token");
       return Promise.resolve(value !== null);
@@ -50,8 +72,4 @@ export class AuthStore {
       return Promise.resolve(false);
     }
   }
-
-  //   isAuthenticated() {
-  //     return this.authenticated;
-  //   }
 }

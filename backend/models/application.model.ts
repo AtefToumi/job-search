@@ -20,6 +20,8 @@ const ApplicationSchema = new Schema({
         type: String,
         enum: ['Waiting for reviewing', 'Reviewing', 'Rejected', 'Accepted']
     }
+}, {
+    timestamps: true
 })
 
 export default mongoose.model("application", ApplicationSchema);

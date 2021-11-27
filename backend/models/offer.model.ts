@@ -10,7 +10,7 @@ const OfferSchema = new Schema({
     },
     company: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'company'
+        ref: 'company'
     },
     description: {
         type: String,
@@ -37,6 +37,9 @@ const OfferSchema = new Schema({
         type: String,
         required: true,
     },
+    image: {
+        type: String
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
@@ -45,6 +48,9 @@ const OfferSchema = new Schema({
 
     // }
 
-})
+},
+    {
+        timestamps: true
+    })
 
 export default mongoose.model("offer", OfferSchema);
