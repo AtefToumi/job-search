@@ -1,21 +1,34 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, StyleSheet, StatusBar, Button, View, Image } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  StatusBar,
+  Button,
+  View,
+  Image,
+  Dimensions,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StoreContext } from "../store.context";
-import IOfferData from "../types/offer.type";
 import { colors } from "../constants/theme";
 import Moment from "react-moment";
 import Feather from "react-native-vector-icons/Feather";
+import { useNavigation } from "@react-navigation/core";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteParams } from "../navigation/GeneralStack";
 
-interface HomeScreenProps {
-  navigation: any;
-}
+interface HomeScreenProps {}
+const { width } = Dimensions.get("window");
 
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
+const HomeScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RouteParams>>();
   const { authStore } = useContext(StoreContext);
   const { offerStore } = useContext(StoreContext);
+
+  const userInfo = authStore.userInfo;
 
   useEffect(() => {
     if (!authStore?.authenticated) {
@@ -23,16 +36,25 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
   }, [authStore]);
 
-  const logout = () => {
-    authStore.logout().then(() => {
-      navigation.navigate("SignIn");
-    });
-  };
-
   const display = () => {
     return offerStore.recentOffers?.map((item) => {
       return (
-        <TouchableOpacity key={item?._id} style={styles.job}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("OfferScreen", {
+              company: item.company,
+              title: item.title,
+              salary: item.salary,
+              location: item.location,
+              type: item.type,
+              description: item.description,
+              requirements: item.requirements,
+              logo: item.image,
+            })
+          }
+          key={item?._id}
+          style={styles.job}
+        >
           <Image
             source={{
               uri: `data:image/jpeg;base64,${item.image}`,
@@ -42,8 +64,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           <View
             style={{
               height: 100,
-              marginLeft: 10,
-              paddingVertical: 20,
+              marginLeft: width * 0.01,
+              paddingVertical: width * 0.05,
               flex: 1,
             }}
           >
@@ -53,9 +75,19 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
                 fontSize: 13,
               }}
             >
-              {item.company.name}
+              {
+                //@ts-ignore
+                item.company.name
+              }
             </Text>
-            <Text style={{ fontWeight: "bold", color: "#000", opacity: 0.5 }}>
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "#000",
+                opacity: 0.5,
+                marginVertical: 5,
+              }}
+            >
               {item.title}
             </Text>
             <Text style={{ fontWeight: "bold", color: "#000", opacity: 0.5 }}>
@@ -64,7 +96,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           </View>
           <View>
             <Text>{item.type}</Text>
-            <Moment fromNow>{item.createdAt}</Moment>
+            <Moment style={{ color: "#000" }} fromNow element={Text}>
+              {item.createdAt}
+            </Moment>
           </View>
         </TouchableOpacity>
       );
@@ -72,64 +106,71 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: colors.lightWhite,
-        flex: 1,
-        paddingHorizontal: 20,
-      }}
-    >
+    <View style={styles.container}>
       <StatusBar backgroundColor="#040507" />
-      <Text
-        style={{
-          color: "#B0B0B0",
-          marginTop: 40,
-          fontWeight: "bold",
-        }}
-      >
-        Hello {authStore.userName}
-      </Text>
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 18,
-          marginTop: 13,
-        }}
-      >
-        Find your best jobs
-      </Text>
-      <View
-        style={{
-          backgroundColor: "#FFF",
-          borderRadius: 5,
-          padding: 5,
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
-        <Feather name="search" color="black" size={20} />
-        <TextInput
-          placeholder="What are you looking for?"
-          placeholderTextColor="#B0B0B0"
+      <SafeAreaView style={styles.titleContainer}>
+        <Image
           style={{
-            fontWeight: "bold",
-            paddingHorizontal: 20,
+            width: 70,
+            height: 70,
+            borderRadius: 20,
+            borderColor: colors.black,
+            borderWidth: 2,
+          }}
+          source={{
+            uri: `data:image/jpeg;base64,${userInfo?.image}`,
           }}
         />
+        <View style={styles.titleTextContainer}>
+          <Text style={styles.nameText}>
+            Welcome{"\n"}
+            {userInfo?.name}
+          </Text>
+        </View>
+      </SafeAreaView>
+
+      <View style={styles.footer}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 18,
+            marginTop: 13,
+          }}
+        >
+          Find your future job
+        </Text>
+        <View
+          style={{
+            backgroundColor: "#FFF",
+            borderRadius: 5,
+            padding: 5,
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 20,
+          }}
+        >
+          <Feather name="search" color="black" size={20} />
+          <TextInput
+            placeholder="What are you looking for?"
+            placeholderTextColor="#B0B0B0"
+            style={{
+              fontWeight: "bold",
+              paddingHorizontal: 20,
+            }}
+          />
+        </View>
+        <Text
+          style={{
+            fontWeight: "bold",
+            marginVertical: 20,
+            fontSize: 15,
+          }}
+        >
+          Recent Jobs:
+        </Text>
+        <ScrollView>{offerStore.recentOffers && display()}</ScrollView>
       </View>
-      <Text
-        style={{
-          fontWeight: "bold",
-          marginVertical: 20,
-          fontSize: 15,
-        }}
-      >
-        Recent Jobs:
-      </Text>
-      {offerStore.recentOffers && display()}
-      <Button onPress={() => logout()} title="Logout" />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -138,8 +179,36 @@ export default observer(HomeScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.green,
+  },
+  header: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingBottom: 20,
+  },
+  footer: {
+    flex: 6,
+    paddingHorizontal: 10,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     backgroundColor: colors.lightWhite,
-    justifyContent: "center",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+    marginLeft: 20,
+  },
+  titleTextContainer: {
+    marginTop: 10,
+    marginLeft: 10,
+    justifyContent: "space-between",
+  },
+  nameText: {
+    fontWeight: "bold",
+    fontSize: 24,
+    textTransform: "capitalize",
+    color: colors.black,
   },
   text_header: {
     color: colors.gray,
@@ -149,18 +218,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    borderRadius: 30,
+    borderRadius: 20,
     margin: 10,
     height: 60,
     width: 60,
   },
   job: {
-    backgroundColor: "white",
+    backgroundColor: colors.lightWhite,
     height: 80,
-    elevation: 15,
+    elevation: 10,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 5,
     borderRadius: 20,
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",

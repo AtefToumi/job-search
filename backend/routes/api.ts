@@ -44,7 +44,7 @@ export const api = (app: Express) => {
     app.delete('/users/:id', UserController.deleteUser)
 
     //skills
-    //return list of users
+    //return list of skills
     app.get('/skills', SkillController.skills)
     //return a user by id   
     app.get('/skills/:id', SkillController.getSkill)
@@ -57,7 +57,7 @@ export const api = (app: Express) => {
 
 
     //applications
-    //return list of users
+    //return list of applications
     app.get('/applications', ApplicationController.applications)
     //return a user by id   
     app.get('/applications/:id', ApplicationController.getApplication)

@@ -7,16 +7,17 @@ import IUser from "../types/user.type";
 
 export class AuthStore {
   public authenticated = false;
-  public userName: any = "";
+  public userId: string = "";
+  public userInfo: IUser | undefined;
 
   constructor(private readonly authService: AuthService) {
     makeAutoObservable(this);
     this.isAccessToken().then(action((result) => {
       this.authenticated = result;
     }));
-    this.getUserName().then(action(((result => {
-      this.userName = result
-    }))))
+    this.getUser().then(action((result) => {
+      this.userInfo = result
+    }))
   }
 
   async login(values: { email: string; password: string }) {
@@ -33,20 +34,31 @@ export class AuthStore {
     }
   }
 
-  async getUserName() {
+  async getUserId() {
     try {
       const storedToken = await AsyncStorage.getItem("access_token");
       if (storedToken) {
         const decodedData: IUser = jwt_decode(storedToken)
-        const userName = decodedData.name;
-        console.log(decodedData)
-        return userName
+        console.log(decodedData._id)
+        return decodedData._id
       }
     } catch (err) {
       return err
     }
   }
-
+  async getUser() {
+    try {
+      const storedToken = await AsyncStorage.getItem("access_token");
+      if (storedToken) {
+        const userToken: IUser = jwt_decode(storedToken)
+        const user = await this.authService.getUser(userToken._id)
+        return user
+      }
+    }
+    catch (err) {
+      return err
+    }
+  }
 
 
   async logout() {

@@ -8,7 +8,7 @@ const colors = {
     gray: '#636e72',
     lightgray: '#333B42',
     dark: '#182028',
-    green: "#159c51"
+    green: "#64e19c"
 }
 
 const sizes = {

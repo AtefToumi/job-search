@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../constants/theme";
 
 import { View, Pressable, Dimensions, StyleSheet } from "react-native";
 import NavigationIcon from "../navigation/navigationIcon";
@@ -41,7 +42,7 @@ const TabBar = ({ state, descriptors, navigation }: any) => {
             <Pressable
               onPress={onPress}
               style={{
-                backgroundColor: isFocused ? "#030D16" : "#182028",
+                backgroundColor: colors.green,
                 borderRadius: 20,
               }}
             >
@@ -68,9 +69,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     bottom: 25,
-    backgroundColor: "#182028",
+    backgroundColor: colors.green,
     borderRadius: 25,
-    marginHorizontal: width * 0.1,
+    marginHorizontal: 30,
+    elevation: 10,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
   },
   mainItemContainer: {
     flex: 1,

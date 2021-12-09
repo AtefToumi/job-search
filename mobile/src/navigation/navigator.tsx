@@ -3,14 +3,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
 import TabBar from "../components/tab.bar.component";
+import MyTabs from "../navigation/top.bar.navigation";
 
-function HomeTabs() {
+const HomeTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName={"home"}
@@ -22,8 +22,8 @@ function HomeTabs() {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="search"
-        component={SearchScreen}
+        name="application"
+        component={MyTabs}
         options={{ headerShown: false }}
       />
       <Tab.Screen
@@ -38,6 +38,6 @@ function HomeTabs() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 export default HomeTabs;

@@ -8,15 +8,23 @@ export class OfferStore {
   constructor(private readonly offerService: OfferService) {
     makeAutoObservable(this);
     this.getOffers().then(action((result) => {
-      console.log(result)
       this.recentOffers = result
     }))
   }
 
   async getOffers() {
     try {
-      const offers = await this.offerService.getOffers();
+      const offers = await this.offerService.getAll();
       return offers;
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  async getOffer(id: string) {
+    try {
+      const offer = await this.offerService.getOffer(id)
     }
     catch (err) {
       console.log(err)

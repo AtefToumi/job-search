@@ -90,7 +90,7 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
 
 
 export const register = (req: Request, res: Response) => {
-  let { email, password, name, dateOfBirth, gender, address, phone } = req.body;
+  let { email, password, name, dateOfBirth, gender, address, phone, image, title, bio } = req.body;
 
   bcryptjs.hash(password, 10, (hashError, hash) => {
     if (hashError) {
@@ -106,7 +106,10 @@ export const register = (req: Request, res: Response) => {
       dateOfBirth,
       gender,
       address,
-      phone
+      phone,
+      image,
+      title,
+      bio
     });
 
     return _user.save()
@@ -198,7 +201,11 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
         }
       ));
     }
-  }).populate('skills experience education');
+  }).populate({ path: 'experience education skills', select: '-_id -__v' });
+}
+
+export const getUserExperience = async () => {
+
 }
 
 /**

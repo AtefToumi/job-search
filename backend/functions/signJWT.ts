@@ -16,12 +16,17 @@ const signJWT = (user: IUser, callback: (error: Error | null, token: string | nu
     try {
         jwt.sign(
             {
+                _id: user._id,
                 email: user.email,
                 name: user.name,
                 dateOfBirth: user.dateOfBirth,
                 gender: user.gender,
                 address: user.address,
-                phone: user.phone
+                phone: user.phone,
+                image: user.image,
+                title: user.title,
+                bio: user.bio,
+                experience: user.experience
             },
             config.server.token.secret,
             {

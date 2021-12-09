@@ -22,6 +22,9 @@ const UserSchema = new Schema({
         type: String,
         minLength: [3, 'enter valid name']
     },
+    title: {
+        type: String
+    },
     dateOfBirth: {
         type: Date,
         trim: true,
@@ -38,6 +41,9 @@ const UserSchema = new Schema({
         type: String,
     },
     photo: {
+        type: String
+    },
+    bio: {
         type: String
     },
     education: [
@@ -57,7 +63,10 @@ const UserSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'skill'
         }
-    ]
+    ],
+    image: {
+        type: String
+    }
 },
     {
         timestamps: true
