@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as theme from "../constants/theme";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Feather from "react-native-vector-icons/Feather";
 import Experience from "../components/experience.component";
 import Education from "../components/education.component";
 import { StoreContext } from "../store.context";
@@ -18,11 +19,18 @@ import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteParams } from "../navigation/GeneralStack";
 import Skills from "../components/skills.component";
-import { SwipeListView } from "react-native-swipe-list-view";
+import {
+  Menu,
+  Divider,
+  HamburgerIcon,
+  Center,
+  NativeBaseProvider,
+} from "native-base";
+import { observer } from "mobx-react-lite";
 
 interface ProfileScreenProps {}
 
-export default function Profile() {
+function Profile() {
   const { authStore } = useContext(StoreContext);
   const navigation = useNavigation<NativeStackNavigationProp<RouteParams>>();
 
@@ -31,110 +39,140 @@ export default function Profile() {
   const userEducation = userInfo?.education;
   const userSkills = userInfo?.skills;
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
-
-  const renderHiddenItem = (item: any) => {
-    return (
-      <TouchableOpacity style={styles.deleteButton} onPress={() => {}}>
-        <Text style={styles.deleteText}>Delete</Text>
-      </TouchableOpacity>
-    );
-  };
-
   return (
-    <View style={{ flex: 1 }}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon
-            name="keyboard-arrow-left"
-            size={30}
-            color={theme.colors.black}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("UserUpdateScreen")}
-        >
-          <Icon name="edit" size={30} color={theme.colors.black} />
-        </TouchableOpacity>
-      </View>
+    <NativeBaseProvider>
+      <View style={{ flex: 1 }}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon
+              name="keyboard-arrow-left"
+              size={30}
+              color={theme.colors.black}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("UserUpdateScreen")}
+          >
+            <Icon name="edit" size={30} color={theme.colors.black} />
+          </TouchableOpacity>
+        </View>
 
-      {/* Body */}
-      <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
-        {/* Company Details */}
-        <View style={styles.titleContainer}>
-          <Image
-            style={{ width: 100, height: 100, borderRadius: 10 }}
-            source={{
-              uri: `data:image/jpeg;base64,${userInfo?.image}`,
-            }}
-          />
-          <View style={styles.titleTextContainer}>
-            <Text style={styles.nameText}>{userInfo?.name}</Text>
-            <Text style={styles.posText}>{userInfo?.title}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Icon name="location-on" size={20} color={theme.colors.gray} />
-              <Text style={[styles.posText, { color: theme.colors.gray }]}>
-                {userInfo?.address}
-              </Text>
+        {/* Body */}
+        <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
+          {/* Company Details */}
+          <View style={styles.titleContainer}>
+            <Image
+              style={{ width: 100, height: 100, borderRadius: 10 }}
+              source={{
+                uri: `data:image/jpeg;base64,${userInfo?.image}`,
+              }}
+            />
+            <View style={styles.titleTextContainer}>
+              <Text style={styles.nameText}>{userInfo?.name}</Text>
+              <Text style={styles.posText}>{userInfo?.title}</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Icon name="location-on" size={20} color={theme.colors.gray} />
+                <Text style={[styles.posText, { color: theme.colors.gray }]}>
+                  {userInfo?.address}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Description */}
-        <Text style={styles.normalText}>{userInfo?.bio}</Text>
+          {/* Description */}
+          <Text style={styles.normalText}>{userInfo?.bio}</Text>
 
-        {/* Experience */}
-        <Text style={styles.titleText}>Work Experience</Text>
-        <View>
-          <SwipeListView
-            data={userExperience}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => {
-              return <Experience item={item} />;
-            }}
-            renderHiddenItem={({ item }) => renderHiddenItem(item)}
-            rightOpenValue={-75}
-          />
-        </View>
+          {/* Experience */}
+          <View
+            style={{ flexDirection: "row", paddingTop: 20, paddingBottom: 7 }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={styles.titleText}>Work Experience</Text>
+            </View>
+            <View>
+              <TouchableOpacity>
+                <Feather name="plus-circle" color="black" size={20} />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        {/* Education */}
-        <Text style={styles.titleText}>Education</Text>
-        <View>
-          <SwipeListView
-            data={userEducation}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => {
-              return <Education item={item} />;
-            }}
-            rightOpenValue={-75}
-            renderHiddenItem={({ item }) => renderHiddenItem(item)}
-          />
-        </View>
-        {/* Skills */}
-        <Text style={styles.titleText}>Skills</Text>
-        <View>
-          <FlatList
-            data={userSkills}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => {
-              return <Skills item={item} />;
-            }}
-          />
-        </View>
-      </ScrollView>
-    </View>
+          <View>
+            <FlatList
+              data={userExperience}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => {
+                return <Experience item={item} />;
+              }}
+            />
+          </View>
+
+          {/* Education */}
+          <View
+            style={{ flexDirection: "row", paddingTop: 20, paddingBottom: 7 }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={styles.titleText}>Education</Text>
+            </View>
+            <View>
+              <TouchableOpacity>
+                <Feather name="plus-circle" color="black" size={20} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <FlatList
+              data={userEducation}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => {
+                return <Education item={item} />;
+              }}
+            />
+          </View>
+          {/* Skills */}
+          <View
+            style={{ flexDirection: "row", paddingTop: 20, paddingBottom: 7 }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={styles.titleText}>Skills</Text>
+            </View>
+            <View>
+              <TouchableOpacity>
+                <Feather name="plus-circle" color="black" size={20} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <FlatList
+              data={userSkills}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => {
+                return <Skills item={item} />;
+              }}
+            />
+          </View>
+        </ScrollView>
+        <View style={styles.bottom}></View>
+      </View>
+    </NativeBaseProvider>
   );
 }
+
+export default observer(Profile);
 
 const styles = StyleSheet.create({
   header: {
     marginTop: 20,
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: theme.colors.lightWhite,
+  },
+  bottom: {
+    height: "10%",
     padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -167,8 +205,6 @@ const styles = StyleSheet.create({
     color: theme.colors.black,
   },
   titleText: {
-    paddingTop: 20,
-    paddingBottom: 7,
     fontWeight: "bold",
     fontSize: theme.sizes.h4,
     color: theme.colors.black,

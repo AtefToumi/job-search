@@ -8,7 +8,7 @@ import IUser from "../types/user.type";
 export class AuthStore {
   public authenticated = false;
   public userId: string = "";
-  public userInfo: IUser | undefined;
+  public userInfo: IUser;
 
   constructor(private readonly authService: AuthService) {
     makeAutoObservable(this);
@@ -39,7 +39,6 @@ export class AuthStore {
       const storedToken = await AsyncStorage.getItem("access_token");
       if (storedToken) {
         const decodedData: IUser = jwt_decode(storedToken)
-        console.log(decodedData._id)
         return decodedData._id
       }
     } catch (err) {

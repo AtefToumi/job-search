@@ -11,6 +11,7 @@ export type RouteParams = {
   Home: undefined;
   UserUpdateScreen: undefined;
   OfferScreen: {
+    _id: String;
     company: String;
     title: String;
     salary: Number;

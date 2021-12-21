@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import * as theme from "../constants/theme";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Moment from "react-moment";
+import { Menu, Pressable } from "native-base";
+import Feather from "react-native-vector-icons/Feather";
 
 //@ts-ignore
 export default function Experience({ item }) {
@@ -29,6 +31,20 @@ export default function Experience({ item }) {
           </Moment>
         </Text>
       </View>
+      <View style={{ alignSelf: "baseline" }}>
+        <Menu
+          trigger={(triggerProps) => {
+            return (
+              <Pressable {...triggerProps}>
+                <Feather name="more-vertical" color="black" size={20} />
+              </Pressable>
+            );
+          }}
+        >
+          <Menu.Item>Delete</Menu.Item>
+          <Menu.Item>Edit</Menu.Item>
+        </Menu>
+      </View>
     </View>
   );
 }
@@ -42,6 +58,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     marginLeft: 10,
     justifyContent: "space-between",
+    width: "85%",
   },
   primaryText: {
     lineHeight: 30,

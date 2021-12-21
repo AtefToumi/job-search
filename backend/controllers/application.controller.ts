@@ -23,10 +23,8 @@ export const applications = async (req: Request, res: Response): Promise<void> =
 export const createApplication = async (req: Request, res: Response): Promise<void> => {
     console.log(req.body)
     const application = new Application({
-        date: new Date(req.body.date),
-        user: req.body.user,
-        offer: req.body.offer,
-        status: req.body.status,
+        user_id: req.body.user_id,
+        offer_id: req.body.offer_id,
     });
 
     application.save((err: any) => {

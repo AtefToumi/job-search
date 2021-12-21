@@ -18,7 +18,8 @@ const ApplicationSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Waiting for reviewing', 'Reviewing', 'Rejected', 'Accepted']
+        enum: ['Waiting for reviewing', 'Reviewing', 'Rejected', 'Accepted'],
+        default: 'Waiting for reviewing'
     }
 }, {
     timestamps: true

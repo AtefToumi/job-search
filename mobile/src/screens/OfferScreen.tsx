@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,8 @@ import { colors } from "../constants/theme";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RouteParams } from "../navigation/GeneralStack";
+import { StoreContext } from "../store.context";
+import { ApplicationStore } from "../stores/application.store";
 
 interface OfferScreenProps {
   navigation: any;
@@ -19,6 +21,13 @@ interface OfferScreenProps {
 
 const OfferScreen = ({ navigation }: OfferScreenProps) => {
   const route = useRoute<RouteProp<RouteParams>>();
+  const { authStore } = useContext(StoreContext);
+  const { applicationStore } = useContext(StoreContext);
+
+  const userInfo = authStore.userInfo;
+  const applyButton = (user_id: string, offer_id: string) => {
+    applicationStore.apply(user_id, offer_id);
+  };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -89,6 +98,7 @@ const OfferScreen = ({ navigation }: OfferScreenProps) => {
               styles.btnContainer,
               { flex: 1, backgroundColor: colors.green, marginLeft: 5 },
             ]}
+            onPress={applyButton(userInfo._id, route.params?._id)}
           >
             <Text
               style={[styles.jobTitle, { color: colors.white, marginTop: 0 }]}

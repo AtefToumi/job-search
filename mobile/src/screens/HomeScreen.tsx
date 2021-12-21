@@ -42,6 +42,7 @@ const HomeScreen = () => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("OfferScreen", {
+              _id: item._id,
               company: item.company,
               title: item.title,
               salary: item.salary,

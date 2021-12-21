@@ -204,9 +204,6 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }).populate({ path: 'experience education skills', select: '-_id -__v' });
 }
 
-export const getUserExperience = async () => {
-
-}
 
 /**
  *
